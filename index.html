@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Seekho AI — Native English Coach</title>
+  <title>Seekho AI — Interactive English Coach</title>
 
   <style>
     :root {
@@ -12,6 +12,7 @@
       --accent: #6366f1;
       --accent-glow: rgba(99, 102, 241, 0.4);
       --success: #10b981;
+      --warning: #f59e0b;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --user-bubble: #4f46e5;
@@ -44,39 +45,66 @@
       overflow: hidden; 
     }
     
-    /* HEADER */
+    /* HEADER & TABS */
     .header { 
       background: #0f172a; 
-      padding: 14px 20px; 
+      padding: 12px 18px 6px; 
       display: flex; 
-      align-items: center; 
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 10px;
       border-bottom: 1px solid var(--card-border);
     }
 
     .brand-group { display: flex; align-items: center; gap: 12px; }
     
     .avatar-glow { 
-      width: 42px; 
-      height: 42px; 
+      width: 38px; 
+      height: 38px; 
       background: linear-gradient(135deg, #6366f1, #a855f7); 
       border-radius: 50%; 
       display: flex; 
       align-items: center; 
       justify-content: center; 
       font-weight: 800; 
-      font-size: 1.2rem; 
+      font-size: 1.1rem; 
       color: white;
       box-shadow: 0 0 14px var(--accent-glow);
     }
     
-    .title-group h1 { font-size: 1.05rem; font-weight: 700; color: white; }
-    .title-group p { font-size: 0.75rem; color: var(--success); font-weight: 600; display: flex; align-items: center; gap: 4px; }
+    .title-group h1 { font-size: 1rem; font-weight: 700; color: white; }
+    .title-group p { font-size: 0.72rem; color: var(--success); font-weight: 600; display: flex; align-items: center; gap: 4px; }
     .status-dot { width: 7px; height: 7px; background: var(--success); border-radius: 50%; display: inline-block; }
 
-    /* QUICK SUGGESTION CHIPS */
+    /* TAB NAVIGATION */
+    .tab-nav {
+      display: flex;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 4px;
+      border-radius: 14px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* QUICK CHIPS */
     .chips-wrapper {
-      padding: 10px 16px;
+      padding: 8px 16px;
       display: flex;
       gap: 8px;
       overflow-x: auto;
@@ -90,19 +118,19 @@
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(255, 255, 255, 0.12);
       color: #cbd5e1;
-      padding: 6px 12px;
+      padding: 5px 12px;
       border-radius: 16px;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       cursor: pointer;
-      transition: all 0.2s ease;
     }
-    .chip:hover { background: var(--accent); color: white; border-color: var(--accent); }
+
+    /* MAIN VIEW AREAS */
+    .view-panel { flex: 1; overflow-y: auto; display: none; flex-direction: column; }
+    .view-panel.active { display: flex; }
 
     /* CHAT CONTAINER */
     .chat-container { 
-      flex: 1; 
       padding: 16px; 
-      overflow-y: auto; 
       display: flex; 
       flex-direction: column; 
       gap: 16px; 
@@ -113,61 +141,82 @@
     .message-group.user { align-self: flex-end; align-items: flex-end; }
     .message-group.ai { align-self: flex-start; align-items: flex-start; }
     
-    .message { padding: 12px 16px; border-radius: 20px; font-size: 0.95rem; line-height: 1.5; word-wrap: break-word; }
+    .message { padding: 12px 16px; border-radius: 20px; font-size: 0.92rem; line-height: 1.5; word-wrap: break-word; }
     .user .message { background: var(--user-bubble); color: white; border-bottom-right-radius: 4px; }
     .ai .message { background: var(--ai-bubble); color: var(--text-main); border-bottom-left-radius: 4px; border: 1px solid var(--card-border); }
 
-    /* STRUCTURAL LESSON CARDS */
     .lesson-card { 
       background: rgba(99, 102, 241, 0.12); 
       border: 1px solid rgba(99, 102, 241, 0.35); 
       border-radius: 16px; 
-      padding: 12px 14px; 
+      padding: 12px; 
       font-size: 0.85rem; 
-      color: #e2e8f0; 
       width: 100%; 
       margin-top: 4px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-    }
-
-    .lesson-section { display: flex; flex-direction: column; gap: 2px; }
-    .lesson-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #a5b4fc; }
-    .lesson-text { font-size: 0.88rem; color: #f1f5f9; }
-
-    /* AUDIO CONTROLS BAR */
-    .audio-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 6px;
-    }
-
-    .audio-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #38bdf8;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.78rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
       gap: 6px;
-      transition: all 0.2s;
     }
-    .audio-btn:hover { background: rgba(56, 189, 248, 0.2); }
+    .lesson-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #a5b4fc; }
+    .lesson-text { font-size: 0.85rem; color: #f1f5f9; }
+
+    /* PRONUNCIATION / QUIZ PANELS */
+    .practice-card {
+      margin: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      text-align: center;
+    }
+
+    .target-box {
+      background: #0f172a;
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      padding: 16px;
+      border-radius: 16px;
+      width: 100%;
+    }
+
+    .target-title { font-size: 0.75rem; color: #a5b4fc; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; }
+    .target-text { font-size: 1.1rem; font-weight: 600; color: #f8fafc; }
+
+    .score-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-top: 10px;
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--success);
+      border: 1px solid var(--success);
+    }
+
+    .audio-btn-inline {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      margin-top: 8px;
+    }
 
     /* CONTROLS AREA */
     .controls { 
-      padding: 14px 16px; 
+      padding: 12px 16px; 
       background: #0f172a; 
       border-top: 1px solid var(--card-border); 
       display: flex; 
       flex-direction: column; 
       align-items: center; 
-      gap: 10px; 
+      gap: 8px; 
     }
     
     .input-row { display: flex; gap: 8px; width: 100%; align-items: center; }
@@ -177,45 +226,37 @@
       background: #1e293b; 
       border: 1px solid #334155; 
       color: white; 
-      padding: 12px 18px; 
+      padding: 10px 16px; 
       border-radius: 24px; 
       outline: none; 
-      font-size: 0.92rem;
+      font-size: 0.9rem;
     }
-    .text-input:focus { border-color: var(--accent); }
     
     .send-btn { 
-      width: 44px; 
-      height: 44px; 
+      width: 42px; 
+      height: 42px; 
       background: var(--accent); 
       border: none;
       color: white; 
       border-radius: 50%;
       cursor: pointer; 
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
 
     .mic-btn { 
-      width: 58px; 
-      height: 58px; 
+      width: 54px; 
+      height: 54px; 
       background: linear-gradient(135deg, #8b5cf6, #6366f1); 
       border: none;
       color: white; 
       border-radius: 50%;
       cursor: pointer; 
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      font-size: 1.6rem; 
-      box-shadow: 0 6px 20px var(--accent-glow);
+      font-size: 1.5rem; 
+      box-shadow: 0 4px 16px var(--accent-glow);
     }
     .mic-btn.listening { 
       background: #ef4444; 
       animation: pulse 1.2s infinite; 
-      box-shadow: 0 0 24px rgba(239, 68, 68, 0.7); 
     }
 
     @keyframes pulse {
@@ -224,7 +265,7 @@
       100% { transform: scale(1); }
     }
     
-    .status-text { font-size: 0.78rem; color: var(--text-muted); text-align: center; font-weight: 500; }
+    .status-text { font-size: 0.75rem; color: var(--text-muted); text-align: center; }
   </style>
 </head>
 <body>
@@ -235,26 +276,62 @@
     <div class="brand-group">
       <div class="avatar-glow">S</div>
       <div class="title-group">
-        <h1>Seekho AI Coach</h1>
-        <p><span class="status-dot"></span> 100% Standalone & Secure</p>
+        <h1>Seekho AI Practice Coach</h1>
+        <p><span class="status-dot"></span> Ready to Practice</p>
+      </div>
+    </div>
+    <!-- Navigation Tabs -->
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab('chat')">💬 Coach Chat</button>
+      <button class="tab-btn" onclick="switchTab('repeat')">🎙️ Repeat Practice</button>
+      <button class="tab-btn" onclick="switchTab('quiz')">🎯 Daily Quiz</button>
+    </div>
+  </div>
+
+  <!-- TAB 1: COACH CHAT -->
+  <div id="tab-chat" class="view-panel active">
+    <div class="chips-wrapper">
+      <div class="chip" onclick="quickSend('Mujhe train ki ticket chahiye')">🎟️ Train ticket</div>
+      <div class="chip" onclick="quickSend('Aapka naam kya hai?')">❓ Aapka naam kya hai?</div>
+      <div class="chip" onclick="quickSend('Mujhe thoda bukhar lag raha hai')">🤒 Bukhar lag raha hai</div>
+    </div>
+    <div class="chat-container" id="chatContainer">
+      <div class="message-group ai">
+        <div class="message">
+          Namaste! 👋 Type or speak any sentence in Hindi/Hinglish. I will give you accurate English translations, conversational replies, and speaking tips!
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Practice Chips -->
-  <div class="chips-wrapper">
-    <div class="chip" onclick="quickSend('Mujhe coffee chahiye')">☕ Coffee chahiye</div>
-    <div class="chip" onclick="quickSend('Aap kya kar rahe ho?')">❓ Aap kya kar rahe ho?</div>
-    <div class="chip" onclick="quickSend('Kal mera interview hai')">💼 Kal interview hai</div>
-    <div class="chip" onclick="quickSend('Aaj mausam accha hai')">☀️ Mausam accha hai</div>
+  <!-- TAB 2: REPEAT AFTER ME (PRONUNCIATION TEST) -->
+  <div id="tab-repeat" class="view-panel">
+    <div class="practice-card">
+      <div class="target-box">
+        <div class="target-title">Target English Sentence</div>
+        <div class="target-text" id="targetSentence">"Could you please give me a glass of water?"</div>
+        <button class="audio-btn-inline" onclick="speakEnglish(document.getElementById('targetSentence').innerText)">🔊 Listen First</button>
+      </div>
+      <p style="font-size:0.85rem; color:var(--text-muted);">
+        Click the Mic below and repeat the sentence out loud to test your pronunciation accuracy!
+      </p>
+      <div id="pronounceFeedback"></div>
+      <button class="audio-btn-inline" style="background:rgba(99,102,241,0.2); color:#a5b4fc;" onclick="nextRepeatSentence()">🔄 New Sentence</button>
+    </div>
   </div>
 
-  <!-- Chat Area -->
-  <div class="chat-container" id="chatContainer">
-    <div class="message-group ai">
-      <div class="message">
-        Namaste! 👋 Mic tap karke boliye ya niche Hindi/Hinglish me write karein. Main bina kisi third-party website redirect ke turant English translation aur tips dungi!
+  <!-- TAB 3: DAILY TRANSLATION QUIZ -->
+  <div id="tab-quiz" class="view-panel">
+    <div class="practice-card">
+      <div class="target-box" style="border-color: rgba(245,158,11,0.4);">
+        <div class="target-title" style="color:#fcd34d;">Translate this to English</div>
+        <div class="target-text" id="quizHindiPrompt">"Kya aap meri madad kar sakte hain?"</div>
       </div>
+      <p style="font-size:0.85rem; color:var(--text-muted);">
+        Speak or type your English attempt in the box below to test your knowledge!
+      </p>
+      <div id="quizFeedback"></div>
+      <button class="audio-btn-inline" style="background:rgba(245,158,11,0.2); color:#fcd34d;" onclick="nextQuizPrompt()">🎲 Next Quiz</button>
     </div>
   </div>
 
@@ -262,7 +339,7 @@
   <div class="controls">
     <button class="mic-btn" id="micBtn" title="Tap to Speak">🎤</button>
     <div class="input-row">
-      <input type="text" class="text-input" id="textInput" placeholder="Boliye ya type karein (e.g. mujhe seekhna hai)...">
+      <input type="text" class="text-input" id="textInput" placeholder="Boliye ya type karein...">
       <button class="send-btn" id="sendBtn">➔</button>
     </div>
     <div class="status-text" id="statusText">Tap mic to speak or type a sentence</div>
@@ -270,25 +347,51 @@
 </div>
 
 <script>
+  let currentTab = 'chat';
+
+  // Sample Repeat Practice Sentences
+  const repeatSentences = [
+    "Could you please give me a glass of water?",
+    "I am learning how to speak English fluently.",
+    "What time does the meeting start today?",
+    "It is a pleasure to meet you.",
+    "Thank you for your help and support."
+  ];
+
+  // Sample Quiz Prompts
+  const quizPrompts = [
+    { hindi: "Kya aap meri madad kar sakte hain?", expected: ["can you help me", "could you help me"] },
+    { hindi: "Mujhe coffee pasand hai.", expected: ["i like coffee", "i love coffee"] },
+    { hindi: "Aap kahan ja rahe hain?", expected: ["where are you going"] },
+    { hindi: "Aaj mausam bohot accha hai.", expected: ["the weather is very nice today", "the weather is good today"] }
+  ];
+
+  let currentQuizIndex = 0;
+
+  function switchTab(tab) {
+    currentTab = tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+
+    event.target.classList.add('active');
+    document.getElementById(`tab-${tab}`).classList.add('active');
+
+    if (tab === 'chat') {
+      statusText.innerText = "Tap mic to speak or type a sentence";
+    } else if (tab === 'repeat') {
+      statusText.innerText = "Tap mic and repeat the sentence out loud!";
+    } else if (tab === 'quiz') {
+      statusText.innerText = "Translate the Hindi prompt into English!";
+    }
+  }
+
   const chatContainer = document.getElementById('chatContainer');
   const micBtn = document.getElementById('micBtn');
   const sendBtn = document.getElementById('sendBtn');
   const textInput = document.getElementById('textInput');
   const statusText = document.getElementById('statusText');
 
-  // Voice Engine setup
-  let voices = [];
-  function initVoices() {
-    if ('speechSynthesis' in window) {
-      voices = window.speechSynthesis.getVoices();
-    }
-  }
-  initVoices();
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.onvoiceschanged = initVoices;
-  }
-
-  // Web Speech Recognition
+  // Speech Recognition Setup
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   let recognition = null;
   let isListening = false;
@@ -297,7 +400,6 @@
     recognition = new SpeechRecognition();
     recognition.continuous = false;
     recognition.interimResults = true;
-    recognition.lang = 'hi-IN';
 
     recognition.onstart = () => {
       isListening = true;
@@ -308,55 +410,32 @@
     recognition.onend = () => {
       isListening = false;
       micBtn.classList.remove('listening');
-      statusText.innerText = 'Tap mic to speak or type a sentence';
     };
 
     recognition.onresult = (e) => {
-      const transcript = Array.from(e.results)
-        .map(result => result[0].transcript)
-        .join('');
-      
+      const transcript = Array.from(e.results).map(r => r[0].transcript).join('');
       textInput.value = transcript;
 
       if (e.results[0].isFinal) {
-        processUserInput(transcript);
+        handleUserInput(transcript);
       }
     };
-
-    recognition.onerror = (e) => {
-      isListening = false;
-      micBtn.classList.remove('listening');
-      statusText.innerText = 'Mic notice: Type your sentence below if mic is quiet.';
-    };
-  } else {
-    statusText.innerText = 'Speech input not supported on this browser version. Use text input!';
   }
 
   micBtn.addEventListener('click', async () => {
     warmupAudio();
-    if (!SpeechRecognition) {
-      alert('Speech recognition is not supported on this browser. Please type below!');
-      return;
-    }
-    if (isListening) {
-      recognition.stop();
-      return;
-    }
-    try {
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        await navigator.mediaDevices.getUserMedia({ audio: true });
-      }
-      recognition.start();
-    } catch (err) {
-      statusText.innerText = '⚠️ Microphone permission denied.';
-    }
+    if (!SpeechRecognition) return alert('Speech input not supported on this browser.');
+    if (isListening) return recognition.stop();
+
+    recognition.lang = (currentTab === 'repeat') ? 'en-US' : 'hi-IN';
+    recognition.start();
   });
 
   sendBtn.addEventListener('click', () => {
     warmupAudio();
     const val = textInput.value.trim();
     if (val) {
-      processUserInput(val);
+      handleUserInput(val);
       textInput.value = '';
     }
   });
@@ -365,164 +444,145 @@
     if (e.key === 'Enter') sendBtn.click();
   });
 
-  function quickSend(text) {
-    textInput.value = text;
+  function quickSend(txt) {
+    textInput.value = txt;
     sendBtn.click();
   }
 
-  // Client-Side AI Translation & Coaching Engine
-  function processUserInput(inputStr) {
+  function handleUserInput(inputStr) {
+    if (currentTab === 'chat') {
+      processChatInput(inputStr);
+    } else if (currentTab === 'repeat') {
+      evaluatePronunciation(inputStr);
+    } else if (currentTab === 'quiz') {
+      evaluateQuizAttempt(inputStr);
+    }
+  }
+
+  // CHAT PROCESSING
+  async function processChatInput(inputStr) {
     appendMessage(inputStr, 'user');
-    statusText.innerText = '⚡ Processing...';
+    statusText.innerText = '⚡ Translating...';
 
-    setTimeout(() => {
-      const aiData = analyzeAndTranslate(inputStr);
+    let translation = "";
+    try {
+      const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(inputStr)}&langpair=autodetect|en`);
+      const data = await res.json();
+      if (data && data.responseData) translation = data.responseData.translatedText;
+    } catch (e) {}
 
-      const lessonHTML = `
-        <div class="lesson-card">
-          <div class="lesson-section">
-            <span class="lesson-label">🎯 English Translation</span>
-            <span class="lesson-text">${escapeHtml(aiData.translation)}</span>
-          </div>
-          <div class="lesson-section">
-            <span class="lesson-label">💡 Fluency Coach Tip</span>
-            <span class="lesson-text">${escapeHtml(aiData.tip)}</span>
-          </div>
+    if (!translation) translation = inputStr;
+
+    const reply = "That is a great phrase to practice in English conversation!";
+    const tip = "Always remember Subject + Verb + Object structure in spoken English.";
+
+    const lessonHTML = `
+      <div class="lesson-card">
+        <div class="lesson-label">🎯 English Translation</div>
+        <div class="lesson-text">${escapeHtml(translation)}</div>
+        <div class="lesson-label" style="margin-top:4px;">💡 Fluency Tip</div>
+        <div class="lesson-text">${escapeHtml(tip)}</div>
+      </div>
+    `;
+
+    const fullSpeech = `${translation}. ${reply}`;
+    appendMessage(reply, 'ai', lessonHTML, fullSpeech);
+    speakEnglish(fullSpeech);
+    statusText.innerText = 'Tap mic to speak or type a sentence';
+  }
+
+  // PRONUNCIATION EVALUATION
+  function evaluatePronunciation(spoken) {
+    const target = document.getElementById('targetSentence').innerText.replace(/"/g, '').toLowerCase().trim();
+    const cleanSpoken = spoken.toLowerCase().trim();
+
+    const score = calculateSimilarity(cleanSpoken, target);
+    const feedbackEl = document.getElementById('pronounceFeedback');
+
+    let badgeColor = score > 75 ? 'rgba(16,185,129,0.2)' : 'rgba(245,158,11,0.2)';
+    let textColor = score > 75 ? 'var(--success)' : 'var(--warning)';
+
+    feedbackEl.innerHTML = `
+      <div class="score-badge" style="background:${badgeColor}; color:${textColor}; border-color:${textColor};">
+        Score: ${score}% Match
+      </div>
+      <p style="font-size:0.85rem; margin-top:8px; color:var(--text-muted);">
+        You said: "<i>${escapeHtml(spoken)}</i>"
+      </p>
+    `;
+  }
+
+  function nextRepeatSentence() {
+    const random = repeatSentences[Math.floor(Math.random() * repeatSentences.length)];
+    document.getElementById('targetSentence').innerText = `"${random}"`;
+    document.getElementById('pronounceFeedback').innerHTML = '';
+  }
+
+  // QUIZ EVALUATION
+  function evaluateQuizAttempt(attempt) {
+    const q = quizPrompts[currentQuizIndex];
+    const cleanAttempt = attempt.toLowerCase().trim();
+    const isCorrect = q.expected.some(exp => cleanAttempt.includes(exp));
+
+    const feedbackEl = document.getElementById('quizFeedback');
+    if (isCorrect) {
+      feedbackEl.innerHTML = `
+        <div class="score-badge">✅ Excellent! Perfect Answer</div>
+      `;
+      speakEnglish("Excellent! Perfect Answer");
+    } else {
+      feedbackEl.innerHTML = `
+        <div class="score-badge" style="background:rgba(239,68,68,0.2); color:#ef4444; border-color:#ef4444;">
+          ❌ Close! Correct: "${q.expected[0]}"
         </div>
       `;
-
-      appendMessage(aiData.reply, 'ai', lessonHTML, aiData.speechText);
-      speakEnglish(aiData.speechText);
-      statusText.innerText = 'Tap mic to speak or type a sentence';
-    }, 300);
+    }
   }
 
-  // Dynamic Rule-based Language AI Engine
-  function analyzeAndTranslate(input) {
-    const text = input.toLowerCase();
-
-    // Coffee / Tea / Drinks
-    if (text.includes('coffee') || text.includes('chai') || text.includes('drink')) {
-      return {
-        translation: "I would like a cup of coffee.",
-        reply: "Would you like some sugar or milk with your drink?",
-        tip: "'Chahiye' ke liye polite English me 'I would like' ka upayog karein.",
-        speechText: "I would like a cup of coffee. Would you like some sugar or milk with your drink?"
-      };
-    }
-    // Greetings / How are you
-    if (text.includes('kaise ho') || text.includes('kaise h') || text.includes('how are you')) {
-      return {
-        translation: "How are you doing today?",
-        reply: "I am doing great, thank you! How is your day going?",
-        tip: "'Kaise ho' ke liye 'How are you doing?' bolein. 'I am fine' ki jagah 'I am doing well' zyada natural lagta hai.",
-        speechText: "I am doing great, thank you! How is your day going?"
-      };
-    }
-    // Name queries
-    if (text.includes('naam') || text.includes('name')) {
-      return {
-        translation: "What is your name?",
-        reply: "My name is Seekho AI. What is your name?",
-        tip: "Apna naam batane ke liye 'My name is...' ya 'I am...' bolein.",
-        speechText: "My name is Seekho AI. What is your name?"
-      };
-    }
-    // Work / Interview
-    if (text.includes('interview') || text.includes('job') || text.includes('kaam')) {
-      return {
-        translation: "I have an interview scheduled for tomorrow.",
-        reply: "Best of luck! Stay calm and speak clearly with confidence.",
-        tip: "Possession / schedule batane ke liye 'I have...' structure ka use karein.",
-        speechText: "I have an interview scheduled for tomorrow. Best of luck!"
-      };
-    }
-    // Weather
-    if (text.includes('mausam') || text.includes('weather') || text.includes('garmi') || txtIncludes(text, ['thand', 'baarish'])) {
-      return {
-        translation: "The weather is very pleasant today.",
-        reply: "Yes, it feels great outside today! Do you have any plans?",
-        tip: "Mausam ke sentences Hamesha 'It is...' se start karein (e.g., 'It is rainy today').",
-        speechText: "The weather is very pleasant today. Yes, it feels great outside today!"
-      };
-    }
-    // Going / Home
-    if (text.includes('ghar') || text.includes('home') || text.includes('jana')) {
-      return {
-        translation: "I want to go home.",
-        reply: "Are you heading home right now? Safe travels!",
-        tip: "Notice karein ki 'home' se pehle 'to' ka use nahi hota ('go home' is correct).",
-        speechText: "I want to go home. Are you heading home right now?"
-      };
-    }
-
-    // Default Fallback Transformer
-    const autoConverted = smartConvertHinglish(input);
-    return {
-      translation: autoConverted.trans,
-      reply: autoConverted.reply,
-      tip: "Sentences banate waqt Subject + Verb + Object order ko follow karein.",
-      speechText: `${autoConverted.trans}. ${autoConverted.reply}`
-    };
+  function nextQuizPrompt() {
+    currentQuizIndex = (currentQuizIndex + 1) % quizPrompts.length;
+    document.getElementById('quizHindiPrompt').innerText = `"${quizPrompts[currentQuizIndex].hindi}"`;
+    document.getElementById('quizFeedback').innerHTML = '';
   }
 
-  function txtIncludes(text, arr) {
-    return arr.some(item => text.includes(item));
-  }
+  // SIMILARITY CALCULATION (STRING MATCH)
+  function calculateSimilarity(s1, s2) {
+    let matches = 0;
+    const words1 = s1.split(" ");
+    const words2 = s2.split(" ");
 
-  function smartConvertHinglish(str) {
-    return {
-      trans: `English translation for: "${str}"`,
-      reply: "That is a great phrase to practice! Try forming more sentences in English."
-    };
+    words1.forEach(w => {
+      if (words2.includes(w)) matches++;
+    });
+
+    return Math.min(100, Math.round((matches / words2.length) * 100));
   }
 
   function appendMessage(text, sender, lessonHTML = null, speechText = null) {
     const group = document.createElement('div');
     group.className = `message-group ${sender}`;
-    
     let html = `<div class="message">${escapeHtml(text)}</div>`;
     if (lessonHTML) html += lessonHTML;
 
     if (sender === 'ai' && speechText) {
-      const cleanSpeech = escapeHtml(speechText).replace(/'/g, "\\'");
-      html += `
-        <div class="audio-controls">
-          <button class="audio-btn" onclick="speakEnglish('${cleanSpeech}')">🔊 Listen Audio</button>
-        </div>
-      `;
+      const clean = escapeHtml(speechText).replace(/'/g, "\\'");
+      html += `<button class="audio-btn-inline" onclick="speakEnglish('${clean}')">🔊 Listen Audio</button>`;
     }
-    
+
     group.innerHTML = html;
     chatContainer.appendChild(group);
     chatContainer.scrollTop = chatContainer.scrollHeight;
   }
 
-  function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  }
-
-  function warmupAudio() {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
-  }
+  function escapeHtml(str) { return str ? str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : ''; }
+  function warmupAudio() { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); }
 
   function speakEnglish(text) {
     if (!('speechSynthesis' in window)) return;
-    
     window.speechSynthesis.cancel();
-    if (!text) return;
-
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-US';
-    utterance.rate = 0.9;
-
-    if (voices.length === 0) voices = window.speechSynthesis.getVoices();
-    const enVoice = voices.find(v => v.lang.startsWith('en'));
-    if (enVoice) utterance.voice = enVoice;
-
+    utterance.rate = 0.88;
     window.speechSynthesis.speak(utterance);
   }
 </script>
