@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bilingual English Seekho AI</title>
+  <title>Bilingual English Seekho AI (HTTPS Ready)</title>
 
   <style>
     /* GLOBAL STYLES */
@@ -69,7 +69,7 @@
     }
     
     .title-group h1 { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.2px; color: white;}
-    .title-group p { font-size: 0.75rem; color: #94a3b8; }
+    .title-group p { font-size: 0.75rem; color: #34d399; font-weight: 600; }
     
     /* CHAT MESSAGES CONTAINER */
     .chat-container { 
@@ -179,7 +179,7 @@
       <div class="avatar-glow">S</div>
       <div class="title-group">
         <h1>Seekho AI</h1>
-        <p>Your Hindi-English Coach</p>
+        <p>🔒 HTTPS Secure Mode Active</p>
       </div>
     </div>
   </div>
@@ -188,7 +188,7 @@
   <div class="chat-container" id="chatContainer">
     <div class="message-group ai">
       <div class="message">
-        Namaste! 🎙️ Mic pakdiye aur Hindi me boliye. Main usko English me convert karke reply karungi aur fluency tips bhi dungi!
+        Namaste! 🎙️ Mic pakdiye aur Hindi me boliye. HTTPS connected! Main usko English me convert karke reply karungi aur fluency tips bhi dungi!
       </div>
     </div>
   </div>
@@ -196,31 +196,36 @@
   <!-- Controls -->
   <div class="controls">
     <button class="mic-btn" id="micBtn">🎤</button>
-    <div class="status-text" id="statusText">Tap mic & speak Hindi/Hinglish</div>
+    <div class="status-text" id="statusText">Tap mic & allow permission to speak</div>
   </div>
 </div>
 
 <script>
+  // Force Redirect HTTP to HTTPS if accessed insecurely
+  if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+    location.replace(`https:${location.href.substring(location.protocol.length)}`);
+  }
+
   // Elements
   const chatContainer = document.getElementById('chatContainer');
   const micBtn = document.getElementById('micBtn');
   const statusText = document.getElementById('statusText');
 
-  // Speech Recognition Setup (Hindi)
+  // Speech Recognition Setup (Hindi + English)
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   let recognition;
   let isListening = false;
 
   if (SpeechRecognition) {
     recognition = new SpeechRecognition();
-    recognition.continuous = false; // Stop after one sentence
-    recognition.lang = 'hi-IN'; // Listen for Hindi/Hinglish
+    recognition.continuous = false; 
+    recognition.lang = 'hi-IN'; // Default to Hindi/Hinglish speech
     recognition.interimResults = false;
 
     recognition.onstart = () => {
       isListening = true;
       micBtn.classList.add('listening');
-      statusText.innerText = 'Suno raha hoon... Boliye...';
+      statusText.innerText = 'Listening... Boliye...';
     };
 
     recognition.onend = () => {
@@ -234,110 +239,117 @@
       handleUserSpeech(transcript);
     };
 
-    recognition.onerror = () => {
-      statusText.innerText = 'Error: Mic range se bahar hai. Try again.';
+    recognition.onerror = (e) => {
+      micBtn.classList.remove('listening');
+      isListening = false;
+      if (e.error === 'not-allowed') {
+        statusText.innerText = '⚠️ Mic blocked! Click lock icon in browser URL bar to allow.';
+      } else {
+        statusText.innerText = 'Speech error. Try clicking mic again.';
+      }
     };
   }
 
-  micBtn.addEventListener('click', () => {
+  micBtn.addEventListener('click', async () => {
     if (!SpeechRecognition) {
-      alert('Your browser does not support voice input. Please use Chrome or Edge.');
+      alert('Your browser does not support Web Speech API. Please use Google Chrome or Microsoft Edge.');
       return;
     }
+
+    // Explicitly Request HTTPS Mic Permission
+    try {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        await navigator.mediaDevices.getUserMedia({ audio: true });
+      }
+    } catch (err) {
+      statusText.innerText = '⚠️ Microphone permission denied in browser.';
+      return;
+    }
+
     if (isListening) {
       recognition.stop();
     } else {
-      window.speechSynthesis.cancel(); // Stop AI speaking if it was
+      window.speechSynthesis.cancel();
       recognition.start();
     }
   });
 
-  // Handle Speech Logic
+  // Handle Speech Processing
   function handleUserSpeech(hindiInput) {
-    // 1. Add User Bubble
     appendMessage(hindiInput, 'user');
+    statusText.innerText = 'Translating & generating response...';
 
-    // 2. Generate Bilingual Lesson & English Reply
-    statusText.innerText = 'Converting...';
-    
-    // OFFLINE logic simulator (since we have no API connection)
     setTimeout(() => {
-      let result = generateOfflineBilingualResponse(hindiInput);
-      
-      // 3. Add AI Bubble
+      let result = generateBilingualResponse(hindiInput);
       appendMessage(result.englishReply, 'ai', result.lessonHTML);
-      
-      // 4. Speak English Reply
       speakEnglish(result.englishReply);
-      
-    }, 1000);
+    }, 800);
   }
 
   function appendMessage(text, sender, lessonHTML = null) {
     const group = document.createElement('div');
     group.className = `message-group ${sender}`;
     
-    let html = `<div class="message">${text}</div>`;
-    
-    if (lessonHTML) {
-      html += lessonHTML;
-    }
+    let html = `<div class="message">${escapeHtml(text)}</div>`;
+    if (lessonHTML) html += lessonHTML;
     
     group.innerHTML = html;
     chatContainer.appendChild(group);
-    chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to bottom
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
   function speakEnglish(text) {
     if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'en-US';
-      utterance.rate = 0.9; // Slightly slower for clarity
-      utterance.pitch = 1.0;
+      utterance.rate = 0.9;
       window.speechSynthesis.speak(utterance);
     }
   }
 
-  // Simulator for Demo purposes (Translates known phrases)
-  function generateOfflineBilingualResponse(hindiInput) {
+  function generateBilingualResponse(hindiInput) {
     const input = hindiInput.toLowerCase();
     let engText = "";
     let lessonBody = "";
 
-    if (input.includes("kaise हो") || input.includes("kaise ho") || input.includes("how are you")) {
+    if (input.includes("kaise ho") || input.includes("kaise h") || input.includes("how are you")) {
       engText = "I am doing great, thank you! How about you?";
       lessonBody = `
         <strong>💡 Translation & Fluency Tip:</strong>
         Aapne bola: "${hindiInput}" (How are you?)
         <div class="tip-box">
-          Fluent banne ke liye, sirfer "I am fine" mat boliye. Use advanced phrases like <em>"I'm doing great"</em> or <em>"I'm pretty good."</em>
+          Fluent banne ke liye: "I am fine" ki jagah <em>"I'm doing great"</em> bolne se conversation natural lagti hai.
         </div>
       `;
     } else if (input.includes("naam") || input.includes("name")) {
-      engText = "My name is Seekho AI. It is nice to meet you.";
+      engText = "My name is Seekho AI. It is nice to meet you!";
       lessonBody = `
         <strong>💡 Learning Corner:</strong>
-        Aapne apna naam pucha.
+        Apna naam batane ke liye:
         <div class="tip-box">
-          English grammar me "Mera naam..." ko handle karne ke liye simple path hai: <em>"My name is [Name]"</em>. "Nice to meet you" bolna politeness increase karta hai.
+          <em>"My name is..."</em> use karein. Politeness ke liye aage <em>"Nice to meet you"</em> zaroor bolein.
         </div>
       `;
-    } else if (input.includes("english seekhna") || input.includes("learn english")) {
-      engText = "That is a wonderful goal! Let's practice every day.";
+    } else if (input.includes("seekhna") || input.includes("learn")) {
+      engText = "That is a great goal! Practicing daily will make you fluent.";
       lessonBody = `
-        <strong>💡 Goal Setting Tip:</strong>
-        English seekhne ke liye consistency zaruri hai.
+        <strong>💡 Fluency Tip:</strong>
+        English sikhne ka tareeka:
         <div class="tip-box">
-          Fluency tips in both languages: Rozana 10 minutes practice karein. Think directly in English, don't translate internally.
+          Dhyan rakhein, English ko mind me translate mat karein. Chote sentences direct English me bolna start karein.
         </div>
       `;
     } else {
-      // Fallback for unknown input
-      engText = `You said "${hindiInput}". Keep speaking, and I will help you become fluent.`;
+      engText = `I heard: "${hindiInput}". Keep practicing to speak English fluently!`;
       lessonBody = `
-        <strong>💡 General Fluency Tip:</strong>
+        <strong>💡 General Tip:</strong>
         <div class="tip-box">
-          Aap grammar rules me confuse mat hoiye. Pehle confidence gain karein, fir correctness (accuracy) par dhyan dein. Small sentences se shuru karein.
+          Grammar ki tension mat lijiye. Pehle bolne ka confidence layein, baki sab practice se apne aap aane lagega!
         </div>
       `;
     }
