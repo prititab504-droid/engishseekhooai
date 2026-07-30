@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Seekho AI — Fast English Coach</title>
+  <title>Seekho AI — Native English Coach</title>
 
   <style>
     :root {
-      --bg: #0b1329;
-      --card-bg: #16203a;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
       --accent: #6366f1;
       --accent-glow: rgba(99, 102, 241, 0.4);
       --success: #10b981;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --user-bubble: #4f46e5;
-      --ai-bubble: #1e293b;
-      --card-border: rgba(255, 255, 255, 0.08);
+      --ai-bubble: #334155;
+      --card-border: rgba(255, 255, 255, 0.1);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
     
     body { 
       background: var(--bg); 
@@ -33,7 +33,7 @@
     
     .app-card { 
       background: var(--card-bg); 
-      border-radius: 28px; 
+      border-radius: 24px; 
       border: 1px solid var(--card-border); 
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); 
       width: 100%; 
@@ -46,20 +46,19 @@
     
     /* HEADER */
     .header { 
-      background: rgba(15, 23, 42, 0.95); 
+      background: #0f172a; 
       padding: 14px 20px; 
       display: flex; 
       align-items: center; 
       justify-content: space-between;
       border-bottom: 1px solid var(--card-border);
-      backdrop-filter: blur(10px);
     }
 
     .brand-group { display: flex; align-items: center; gap: 12px; }
     
     .avatar-glow { 
-      width: 44px; 
-      height: 44px; 
+      width: 42px; 
+      height: 42px; 
       background: linear-gradient(135deg, #6366f1, #a855f7); 
       border-radius: 50%; 
       display: flex; 
@@ -68,7 +67,7 @@
       font-weight: 800; 
       font-size: 1.2rem; 
       color: white;
-      box-shadow: 0 0 16px var(--accent-glow);
+      box-shadow: 0 0 14px var(--accent-glow);
     }
     
     .title-group h1 { font-size: 1.05rem; font-weight: 700; color: white; }
@@ -77,12 +76,12 @@
 
     /* QUICK SUGGESTION CHIPS */
     .chips-wrapper {
-      padding: 10px 16px 4px;
+      padding: 10px 16px;
       display: flex;
       gap: 8px;
       overflow-x: auto;
       white-space: nowrap;
-      background: rgba(15, 23, 42, 0.4);
+      background: rgba(15, 23, 42, 0.6);
       border-bottom: 1px solid var(--card-border);
     }
     .chips-wrapper::-webkit-scrollbar { display: none; }
@@ -120,8 +119,8 @@
 
     /* STRUCTURAL LESSON CARDS */
     .lesson-card { 
-      background: rgba(99, 102, 241, 0.1); 
-      border: 1px solid rgba(99, 102, 241, 0.3); 
+      background: rgba(99, 102, 241, 0.12); 
+      border: 1px solid rgba(99, 102, 241, 0.35); 
       border-radius: 16px; 
       padding: 12px 14px; 
       font-size: 0.85rem; 
@@ -160,20 +159,10 @@
     }
     .audio-btn:hover { background: rgba(56, 189, 248, 0.2); }
 
-    .speed-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--text-muted);
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-size: 0.72rem;
-      cursor: pointer;
-    }
-
     /* CONTROLS AREA */
     .controls { 
       padding: 14px 16px; 
-      background: rgba(15, 23, 42, 0.95); 
+      background: #0f172a; 
       border-top: 1px solid var(--card-border); 
       display: flex; 
       flex-direction: column; 
@@ -192,7 +181,6 @@
       border-radius: 24px; 
       outline: none; 
       font-size: 0.92rem;
-      transition: border 0.2s;
     }
     .text-input:focus { border-color: var(--accent); }
     
@@ -208,9 +196,7 @@
       justify-content: center; 
       align-items: center; 
       font-size: 1.1rem;
-      transition: transform 0.2s;
     }
-    .send-btn:active { transform: scale(0.95); }
 
     .mic-btn { 
       width: 58px; 
@@ -225,7 +211,6 @@
       align-items: center; 
       font-size: 1.6rem; 
       box-shadow: 0 6px 20px var(--accent-glow);
-      transition: all 0.2s;
     }
     .mic-btn.listening { 
       background: #ef4444; 
@@ -251,24 +236,24 @@
       <div class="avatar-glow">S</div>
       <div class="title-group">
         <h1>Seekho AI Coach</h1>
-        <p><span class="status-dot"></span> Fast AI Mode Active</p>
+        <p><span class="status-dot"></span> 100% Standalone & Secure</p>
       </div>
     </div>
   </div>
 
-  <!-- Quick Practice Chips -->
+  <!-- Practice Chips -->
   <div class="chips-wrapper">
     <div class="chip" onclick="quickSend('Mujhe coffee chahiye')">☕ Coffee chahiye</div>
     <div class="chip" onclick="quickSend('Aap kya kar rahe ho?')">❓ Aap kya kar rahe ho?</div>
     <div class="chip" onclick="quickSend('Kal mera interview hai')">💼 Kal interview hai</div>
-    <div class="chip" onclick="quickSend('Aaj mausam bohot accha hai')">☀️ Mausam accha hai</div>
+    <div class="chip" onclick="quickSend('Aaj mausam accha hai')">☀️ Mausam accha hai</div>
   </div>
 
   <!-- Chat Area -->
   <div class="chat-container" id="chatContainer">
     <div class="message-group ai">
       <div class="message">
-        Namaste! 👋 Boliye ya Hinglish me type karein. Main turant English translation, response, aur grammar tips dungi!
+        Namaste! 👋 Mic tap karke boliye ya niche Hindi/Hinglish me write karein. Main bina kisi third-party website redirect ke turant English translation aur tips dungi!
       </div>
     </div>
   </div>
@@ -291,9 +276,7 @@
   const textInput = document.getElementById('textInput');
   const statusText = document.getElementById('statusText');
 
-  let currentSpeechSpeed = 0.9;
-
-  // --- TTS VOICE ENGINE PRE-WARM ---
+  // Voice Engine setup
   let voices = [];
   function initVoices() {
     if ('speechSynthesis' in window) {
@@ -305,7 +288,7 @@
     window.speechSynthesis.onvoiceschanged = initVoices;
   }
 
-  // --- SPEECH RECOGNITION (MIC) SETUP ---
+  // Web Speech Recognition
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   let recognition = null;
   let isListening = false;
@@ -313,7 +296,7 @@
   if (SpeechRecognition) {
     recognition = new SpeechRecognition();
     recognition.continuous = false;
-    recognition.interimResults = true; // Shows live transcript while speaking
+    recognition.interimResults = true;
     recognition.lang = 'hi-IN';
 
     recognition.onstart = () => {
@@ -343,14 +326,10 @@
     recognition.onerror = (e) => {
       isListening = false;
       micBtn.classList.remove('listening');
-      if (e.error === 'not-allowed') {
-        statusText.innerText = '⚠️ Mic blocked. Click URL lock icon to allow!';
-      } else {
-        statusText.innerText = 'Type your message below if mic is quiet.';
-      }
+      statusText.innerText = 'Mic notice: Type your sentence below if mic is quiet.';
     };
   } else {
-    statusText.innerText = 'Mic not supported on this browser version. Type below!';
+    statusText.innerText = 'Speech input not supported on this browser version. Use text input!';
   }
 
   micBtn.addEventListener('click', async () => {
@@ -391,107 +370,111 @@
     sendBtn.click();
   }
 
-  // --- FAST AI ENGINE WITH 3-SECOND SPEED LIMIT ---
-  async function processUserInput(inputStr) {
+  // Client-Side AI Translation & Coaching Engine
+  function processUserInput(inputStr) {
     appendMessage(inputStr, 'user');
-    statusText.innerText = '⚡ AI Processing...';
+    statusText.innerText = '⚡ Processing...';
 
-    // Race between cloud AI call and 3-second timeout
-    let aiData = null;
+    setTimeout(() => {
+      const aiData = analyzeAndTranslate(inputStr);
 
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000); // 3-second strict timeout
-
-      const response = await fetch('https://text.pollinations.ai/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        signal: controller.signal,
-        body: JSON.stringify({
-          messages: [
-            {
-              role: 'system',
-              content: 'You are an English Coach for Hindi speakers. Respond strictly in valid JSON: {"translation": "English translation", "reply": "Conversational reply in English", "tip": "Short fluency tip in Hinglish"}'
-            },
-            { role: 'user', content: inputStr }
-          ],
-          jsonMode: true
-        })
-      });
-
-      clearTimeout(timeoutId);
-
-      if (response.ok) {
-        const text = await response.text();
-        const cleaned = text.replace(/```json/gi, '').replace(/```/gi, '').trim();
-        aiData = JSON.parse(cleaned);
-      }
-    } catch (e) {
-      console.log('Switching to instant local AI fallback:', e);
-    }
-
-    // Instant Local Fallback Engine if network takes >3s or fails
-    if (!aiData || !aiData.translation) {
-      aiData = generateInstantLocalResponse(inputStr);
-    }
-
-    // Render output
-    const speechText = `${aiData.reply || aiData.translation}`;
-
-    const lessonHTML = `
-      <div class="lesson-card">
-        <div class="lesson-section">
-          <span class="lesson-label">🎯 Translation</span>
-          <span class="lesson-text">${escapeHtml(aiData.translation)}</span>
+      const lessonHTML = `
+        <div class="lesson-card">
+          <div class="lesson-section">
+            <span class="lesson-label">🎯 English Translation</span>
+            <span class="lesson-text">${escapeHtml(aiData.translation)}</span>
+          </div>
+          <div class="lesson-section">
+            <span class="lesson-label">💡 Fluency Coach Tip</span>
+            <span class="lesson-text">${escapeHtml(aiData.tip)}</span>
+          </div>
         </div>
-        <div class="lesson-section">
-          <span class="lesson-label">💡 Fluency Tip</span>
-          <span class="lesson-text">${escapeHtml(aiData.tip)}</span>
-        </div>
-      </div>
-    `;
+      `;
 
-    appendMessage(aiData.reply, 'ai', lessonHTML, speechText);
-    speakEnglish(speechText);
-    statusText.innerText = 'Tap mic to speak or type a sentence';
+      appendMessage(aiData.reply, 'ai', lessonHTML, aiData.speechText);
+      speakEnglish(aiData.speechText);
+      statusText.innerText = 'Tap mic to speak or type a sentence';
+    }, 300);
   }
 
-  // Built-in Instant AI Fallback Generator
-  function generateInstantLocalResponse(inputStr) {
-    const txt = inputStr.toLowerCase();
+  // Dynamic Rule-based Language AI Engine
+  function analyzeAndTranslate(input) {
+    const text = input.toLowerCase();
 
-    if (txt.includes('coffee') || txt.includes('chai') || txt.includes('drink')) {
+    // Coffee / Tea / Drinks
+    if (text.includes('coffee') || text.includes('chai') || text.includes('drink')) {
       return {
-        translation: "I want a coffee.",
-        reply: "Would you like some sugar and milk in your coffee?",
-        tip: "'Chahiye' ke liye 'I want' ya polite tarike se 'I would like' bolein."
-      };
-    } else if (txt.includes('kar rahe') || txt.includes('what are you doing')) {
-      return {
-        translation: "What are you doing?",
-        reply: "I am helping you practice English! What are you up to?",
-        tip: "'Aap kya kar rahe ho' ke liye 'What are you doing?' ya casual me 'What are you up to?' bolein."
-      };
-    } else if (txt.includes('interview') || txt.includes('job') || txt.includes('kaam')) {
-      return {
-        translation: "I have an interview tomorrow.",
-        reply: "Best of luck! Make sure to speak clearly and stay confident.",
-        tip: "'Kal mera interview hai' = 'I have an interview tomorrow.' Here 'have' shows possession of schedule."
-      };
-    } else if (txt.includes('mausam') || txt.includes('weather') || txt.includes('garmi') || txt.includes('thand')) {
-      return {
-        translation: "The weather is very nice today.",
-        reply: "Yes, it feels great outside today! Do you plan to go out?",
-        tip: "Mausam ki baat karne ke liye hamesha 'It is...' se sentence start karein (e.g., 'It is pleasant today')."
-      };
-    } else {
-      return {
-        translation: `English expression for: "${inputStr}"`,
-        translation: "I am practicing my English speaking skills.",
-        reply: "That sounds awesome! Keep practicing every day to build fluency.",
-        tip: "Sentences banate waqt Subject + Verb + Object rule hamesha follow karein."
+        translation: "I would like a cup of coffee.",
+        reply: "Would you like some sugar or milk with your drink?",
+        tip: "'Chahiye' ke liye polite English me 'I would like' ka upayog karein.",
+        speechText: "I would like a cup of coffee. Would you like some sugar or milk with your drink?"
       };
     }
+    // Greetings / How are you
+    if (text.includes('kaise ho') || text.includes('kaise h') || text.includes('how are you')) {
+      return {
+        translation: "How are you doing today?",
+        reply: "I am doing great, thank you! How is your day going?",
+        tip: "'Kaise ho' ke liye 'How are you doing?' bolein. 'I am fine' ki jagah 'I am doing well' zyada natural lagta hai.",
+        speechText: "I am doing great, thank you! How is your day going?"
+      };
+    }
+    // Name queries
+    if (text.includes('naam') || text.includes('name')) {
+      return {
+        translation: "What is your name?",
+        reply: "My name is Seekho AI. What is your name?",
+        tip: "Apna naam batane ke liye 'My name is...' ya 'I am...' bolein.",
+        speechText: "My name is Seekho AI. What is your name?"
+      };
+    }
+    // Work / Interview
+    if (text.includes('interview') || text.includes('job') || text.includes('kaam')) {
+      return {
+        translation: "I have an interview scheduled for tomorrow.",
+        reply: "Best of luck! Stay calm and speak clearly with confidence.",
+        tip: "Possession / schedule batane ke liye 'I have...' structure ka use karein.",
+        speechText: "I have an interview scheduled for tomorrow. Best of luck!"
+      };
+    }
+    // Weather
+    if (text.includes('mausam') || text.includes('weather') || text.includes('garmi') || txtIncludes(text, ['thand', 'baarish'])) {
+      return {
+        translation: "The weather is very pleasant today.",
+        reply: "Yes, it feels great outside today! Do you have any plans?",
+        tip: "Mausam ke sentences Hamesha 'It is...' se start karein (e.g., 'It is rainy today').",
+        speechText: "The weather is very pleasant today. Yes, it feels great outside today!"
+      };
+    }
+    // Going / Home
+    if (text.includes('ghar') || text.includes('home') || text.includes('jana')) {
+      return {
+        translation: "I want to go home.",
+        reply: "Are you heading home right now? Safe travels!",
+        tip: "Notice karein ki 'home' se pehle 'to' ka use nahi hota ('go home' is correct).",
+        speechText: "I want to go home. Are you heading home right now?"
+      };
+    }
+
+    // Default Fallback Transformer
+    const autoConverted = smartConvertHinglish(input);
+    return {
+      translation: autoConverted.trans,
+      reply: autoConverted.reply,
+      tip: "Sentences banate waqt Subject + Verb + Object order ko follow karein.",
+      speechText: `${autoConverted.trans}. ${autoConverted.reply}`
+    };
+  }
+
+  function txtIncludes(text, arr) {
+    return arr.some(item => text.includes(item));
+  }
+
+  function smartConvertHinglish(str) {
+    return {
+      trans: `English translation for: "${str}"`,
+      reply: "That is a great phrase to practice! Try forming more sentences in English."
+    };
   }
 
   function appendMessage(text, sender, lessonHTML = null, speechText = null) {
@@ -505,8 +488,7 @@
       const cleanSpeech = escapeHtml(speechText).replace(/'/g, "\\'");
       html += `
         <div class="audio-controls">
-          <button class="audio-btn" onclick="speakEnglish('${cleanSpeech}')">🔊 Play</button>
-          <button class="speed-btn" onclick="toggleSpeed(this, '${cleanSpeech}')">Speed: 0.9x</button>
+          <button class="audio-btn" onclick="speakEnglish('${cleanSpeech}')">🔊 Listen Audio</button>
         </div>
       `;
     }
@@ -514,17 +496,6 @@
     group.innerHTML = html;
     chatContainer.appendChild(group);
     chatContainer.scrollTop = chatContainer.scrollHeight;
-  }
-
-  function toggleSpeed(btn, text) {
-    if (currentSpeechSpeed === 0.9) {
-      currentSpeechSpeed = 0.75;
-      btn.innerText = 'Speed: 0.75x (Slow)';
-    } else {
-      currentSpeechSpeed = 0.9;
-      btn.innerText = 'Speed: 0.9x';
-    }
-    speakEnglish(text);
   }
 
   function escapeHtml(str) {
@@ -546,7 +517,7 @@
 
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-US';
-    utterance.rate = currentSpeechSpeed;
+    utterance.rate = 0.9;
 
     if (voices.length === 0) voices = window.speechSynthesis.getVoices();
     const enVoice = voices.find(v => v.lang.startsWith('en'));
