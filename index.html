@@ -3,34 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bilingual English Seekho AI (HTTPS Ready)</title>
+  <title>Seekho AI — English Coach</title>
 
   <style>
-    /* GLOBAL STYLES */
-    * { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background: #0f172a; color: #f1f5f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 12px; }
     
-    body { 
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); 
-      color: #f1f5f9; 
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      min-height: 100vh; 
-      padding: 12px;
-      margin: 0;
-    }
-    
-    /* MAIN APPLICATION CARD */
     .app-card { 
-      background: rgba(255, 255, 255, 0.05); 
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: 30px; 
+      background: #1e293b; 
+      border-radius: 24px; 
       border: 1px solid rgba(255, 255, 255, 0.1); 
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
       width: 100%; 
@@ -39,24 +20,20 @@
       flex-direction: column; 
       height: 92vh; 
       overflow: hidden; 
-      position: relative;
     }
     
-    /* HEADER */
     .header { 
-      background: rgba(15, 23, 42, 0.8); 
+      background: #0f172a; 
       padding: 16px 20px; 
       display: flex; 
-      justify-content: space-between; 
       align-items: center; 
+      gap: 12px; 
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      z-index: 10;
     }
     
-    .brand-group { display: flex; align-items: center; gap: 12px; }
     .avatar-glow { 
-      width: 44px; 
-      height: 44px; 
+      width: 42px; 
+      height: 42px; 
       background: linear-gradient(135deg, #6366f1, #a855f7); 
       border-radius: 50%; 
       display: flex; 
@@ -65,234 +42,210 @@
       font-weight: 700; 
       font-size: 1.2rem; 
       color: white;
-      box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
     }
     
-    .title-group h1 { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.2px; color: white;}
-    .title-group p { font-size: 0.75rem; color: #34d399; font-weight: 600; }
+    .title-group h1 { font-size: 1.1rem; font-weight: 700; color: white;}
+    .title-group p { font-size: 0.75rem; color: #34d399; }
     
-    /* CHAT MESSAGES CONTAINER */
     .chat-container { 
       flex: 1; 
-      padding: 20px; 
+      padding: 16px; 
       overflow-y: auto; 
       display: flex; 
       flex-direction: column; 
-      gap: 18px; 
-      scroll-behavior: smooth; 
+      gap: 14px; 
     }
-    
-    .chat-container::-webkit-scrollbar { width: 5px; }
-    .chat-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 5px; }
 
-    /* MESSAGE BUBBLES */
-    .message-group { display: flex; flex-direction: column; gap: 8px; max-width: 90%; }
+    .message-group { display: flex; flex-direction: column; gap: 6px; max-width: 90%; }
     .message-group.user { align-self: flex-end; align-items: flex-end; }
     .message-group.ai { align-self: flex-start; align-items: flex-start; }
     
-    .message { 
-      padding: 14px 18px; 
-      border-radius: 22px; 
-      font-size: 0.95rem; 
-      line-height: 1.5; 
-      word-wrap: break-word; 
-    }
-    .user .message { 
-      background: linear-gradient(135deg, #6366f1, #4f46e5); 
-      color: white; 
-      border-bottom-right-radius: 4px; 
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-    }
-    .ai .message { 
-      background: rgba(255, 255, 255, 0.08); 
-      color: #f8fafc; 
-      border-bottom-left-radius: 4px; 
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
+    .message { padding: 12px 16px; border-radius: 18px; font-size: 0.92rem; line-height: 1.45; word-wrap: break-word; }
+    .user .message { background: #6366f1; color: white; border-bottom-right-radius: 4px; }
+    .ai .message { background: #334155; color: #f8fafc; border-bottom-left-radius: 4px; }
 
-    /* BILINGUAL INSTRUCTION CARD */
     .lesson-card { 
-      background: rgba(168, 85, 247, 0.1); 
+      background: rgba(168, 85, 247, 0.12); 
       border: 1px solid rgba(168, 85, 247, 0.3); 
-      border-radius: 16px; 
-      padding: 12px 16px; 
-      font-size: 0.85rem; 
+      border-radius: 14px; 
+      padding: 10px 14px; 
+      font-size: 0.82rem; 
       color: #e9d5ff; 
-      display: flex; 
-      flex-direction: column; 
-      gap: 8px; 
       width: 100%; 
     }
-    .lesson-card strong { color: #d8b4fe; font-weight: 600; display: flex; align-items: center; gap: 6px; }
-    
-    .tip-box { background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; border-left: 3px solid #6366f1; }
+    .tip-box { background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; margin-top: 4px; border-left: 3px solid #6366f1; }
 
-    /* CONTROLS AREA */
     .controls { 
-      padding: 20px; 
-      background: rgba(15, 23, 42, 0.8); 
+      padding: 16px; 
+      background: #0f172a; 
       border-top: 1px solid rgba(255, 255, 255, 0.08); 
       display: flex; 
       flex-direction: column; 
       align-items: center; 
-      gap: 14px; 
+      gap: 10px; 
     }
     
-    .mic-btn { 
-      width: 72px; 
-      height: 72px; 
-      border-radius: 50%; 
-      background: linear-gradient(135deg, #a855f7, #6366f1); 
+    .input-row { display: flex; gap: 8px; width: 100%; }
+    .text-input { 
+      flex: 1; 
+      background: #1e293b; 
+      border: 1px solid #334155; 
+      color: white; 
+      padding: 12px 16px; 
+      border-radius: 24px; 
+      outline: none; 
+      font-size: 0.9rem;
+    }
+    
+    .send-btn, .mic-btn { 
       border: none; 
       color: white; 
-      font-size: 1.8rem; 
       cursor: pointer; 
+      border-radius: 50%; 
       display: flex; 
       justify-content: center; 
       align-items: center; 
-      transition: all 0.2s ease; 
-      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4); 
-      position: relative;
-    }
-    .mic-btn:hover { transform: scale(1.06); }
-    .mic-btn.listening { 
-      background: linear-gradient(135deg, #ef4444, #dc2626); 
-      animation: pulse 1.4s infinite; 
-      box-shadow: 0 8px 24px rgba(239, 68, 68, 0.5); 
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-      70% { transform: scale(1.08); box-shadow: 0 0 0 16px rgba(239, 68, 68, 0); }
-      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+      transition: all 0.2s ease;
     }
     
-    .status-text { font-size: 0.85rem; color: #94a3b8; font-weight: 500; text-align: center; }
+    .send-btn { width: 44px; height: 44px; background: #6366f1; font-size: 1.1rem; }
+    .mic-btn { width: 56px; height: 56px; background: linear-gradient(135deg, #a855f7, #6366f1); font-size: 1.5rem; }
+    .mic-btn.listening { background: #ef4444; animation: pulse 1.2s infinite; }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+    
+    .status-text { font-size: 0.8rem; color: #94a3b8; text-align: center; }
   </style>
 </head>
 <body>
 
 <div class="app-card">
-  <!-- Header -->
   <div class="header">
-    <div class="brand-group">
-      <div class="avatar-glow">S</div>
-      <div class="title-group">
-        <h1>Seekho AI</h1>
-        <p>🔒 HTTPS Secure Mode Active</p>
-      </div>
+    <div class="avatar-glow">S</div>
+    <div class="title-group">
+      <h1>Seekho AI Coach</h1>
+      <p>● Voice & Text Mode Active</p>
     </div>
   </div>
 
-  <!-- Chat Area -->
   <div class="chat-container" id="chatContainer">
     <div class="message-group ai">
       <div class="message">
-        Namaste! 🎙️ Mic pakdiye aur Hindi me boliye. HTTPS connected! Main usko English me convert karke reply karungi aur fluency tips bhi dungi!
+        Namaste! 🎙️ Hindi me boliye ya niche type karein. Main English me convert karke sikhaungi!
       </div>
     </div>
   </div>
 
-  <!-- Controls -->
   <div class="controls">
     <button class="mic-btn" id="micBtn">🎤</button>
-    <div class="status-text" id="statusText">Tap mic & allow permission to speak</div>
+    <div class="input-row">
+      <input type="text" class="text-input" id="textInput" placeholder="Boliye ya Hindi/Hinglish type karein...">
+      <button class="send-btn" id="sendBtn">➔</button>
+    </div>
+    <div class="status-text" id="statusText">Tap mic or type a message</div>
   </div>
 </div>
 
 <script>
-  // Force Redirect HTTP to HTTPS if accessed insecurely
-  if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
-    location.replace(`https:${location.href.substring(location.protocol.length)}`);
-  }
-
-  // Elements
   const chatContainer = document.getElementById('chatContainer');
   const micBtn = document.getElementById('micBtn');
+  const sendBtn = document.getElementById('sendBtn');
+  const textInput = document.getElementById('textInput');
   const statusText = document.getElementById('statusText');
 
-  // Speech Recognition Setup (Hindi + English)
+  // Speech Recognition Initializer
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   let recognition;
   let isListening = false;
 
   if (SpeechRecognition) {
     recognition = new SpeechRecognition();
-    recognition.continuous = false; 
-    recognition.lang = 'hi-IN'; // Default to Hindi/Hinglish speech
-    recognition.interimResults = false;
+    recognition.continuous = false;
+    recognition.lang = 'hi-IN';
 
     recognition.onstart = () => {
       isListening = true;
       micBtn.classList.add('listening');
-      statusText.innerText = 'Listening... Boliye...';
+      statusText.innerText = 'Listening... Speak in Hindi/Hinglish now';
     };
 
     recognition.onend = () => {
       isListening = false;
       micBtn.classList.remove('listening');
-      statusText.innerText = 'Tap mic to speak again';
+      statusText.innerText = 'Tap mic or type a message';
     };
 
     recognition.onresult = (e) => {
       const transcript = e.results[0][0].transcript;
-      handleUserSpeech(transcript);
+      processInput(transcript);
     };
 
     recognition.onerror = (e) => {
-      micBtn.classList.remove('listening');
       isListening = false;
-      if (e.error === 'not-allowed') {
-        statusText.innerText = '⚠️ Mic blocked! Click lock icon in browser URL bar to allow.';
-      } else {
-        statusText.innerText = 'Speech error. Try clicking mic again.';
-      }
+      micBtn.classList.remove('listening');
+      statusText.innerText = 'Mic issue detected. You can type below!';
     };
+  } else {
+    statusText.innerText = 'Voice not supported in browser. Use typing input below!';
   }
 
+  // Mic Click Listener
   micBtn.addEventListener('click', async () => {
     if (!SpeechRecognition) {
-      alert('Your browser does not support Web Speech API. Please use Google Chrome or Microsoft Edge.');
+      alert('Speech input not supported on this browser version. Use text input!');
       return;
     }
-
-    // Explicitly Request HTTPS Mic Permission
-    try {
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        await navigator.mediaDevices.getUserMedia({ audio: true });
-      }
-    } catch (err) {
-      statusText.innerText = '⚠️ Microphone permission denied in browser.';
-      return;
-    }
-
     if (isListening) {
       recognition.stop();
     } else {
-      window.speechSynthesis.cancel();
-      recognition.start();
+      try {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          await navigator.mediaDevices.getUserMedia({ audio: true });
+        }
+        window.speechSynthesis.cancel();
+        recognition.start();
+      } catch (err) {
+        statusText.innerText = '⚠️ Mic access denied. Allow permissions in browser settings.';
+      }
     }
   });
 
-  // Handle Speech Processing
-  function handleUserSpeech(hindiInput) {
-    appendMessage(hindiInput, 'user');
-    statusText.innerText = 'Translating & generating response...';
+  // Text Send Listener
+  sendBtn.addEventListener('click', () => {
+    const val = textInput.value.trim();
+    if (val) {
+      processInput(val);
+      textInput.value = '';
+    }
+  });
+
+  textInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      sendBtn.click();
+    }
+  });
+
+  function processInput(userInput) {
+    appendMessage(userInput, 'user');
+    statusText.innerText = 'Processing...';
 
     setTimeout(() => {
-      let result = generateBilingualResponse(hindiInput);
-      appendMessage(result.englishReply, 'ai', result.lessonHTML);
-      speakEnglish(result.englishReply);
-    }, 800);
+      const res = generateBilingualResponse(userInput);
+      appendMessage(res.englishReply, 'ai', res.lessonHTML);
+      speakEnglish(res.englishReply);
+      statusText.innerText = 'Tap mic or type a message';
+    }, 600);
   }
 
   function appendMessage(text, sender, lessonHTML = null) {
     const group = document.createElement('div');
     group.className = `message-group ${sender}`;
-    
     let html = `<div class="message">${escapeHtml(text)}</div>`;
     if (lessonHTML) html += lessonHTML;
-    
     group.innerHTML = html;
     chatContainer.appendChild(group);
     chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -312,44 +265,44 @@
     }
   }
 
-  function generateBilingualResponse(hindiInput) {
-    const input = hindiInput.toLowerCase();
+  function generateBilingualResponse(inputStr) {
+    const input = inputStr.toLowerCase();
     let engText = "";
     let lessonBody = "";
 
     if (input.includes("kaise ho") || input.includes("kaise h") || input.includes("how are you")) {
-      engText = "I am doing great, thank you! How about you?";
+      engText = "I am doing great, thank you! How are you today?";
       lessonBody = `
-        <strong>💡 Translation & Fluency Tip:</strong>
-        Aapne bola: "${hindiInput}" (How are you?)
+        <strong>💡 Translation & Tip:</strong>
+        Aapne bola: "${inputStr}"
         <div class="tip-box">
-          Fluent banne ke liye: "I am fine" ki jagah <em>"I'm doing great"</em> bolne se conversation natural lagti hai.
+          Daily English fluency: "I am fine" ki jagah <em>"I am doing great"</em> use karein.
         </div>
       `;
     } else if (input.includes("naam") || input.includes("name")) {
-      engText = "My name is Seekho AI. It is nice to meet you!";
+      engText = "My name is Seekho AI. What is your name?";
       lessonBody = `
         <strong>💡 Learning Corner:</strong>
         Apna naam batane ke liye:
         <div class="tip-box">
-          <em>"My name is..."</em> use karein. Politeness ke liye aage <em>"Nice to meet you"</em> zaroor bolein.
+          <em>"My name is [Your Name]"</em> bolein.
         </div>
       `;
-    } else if (input.includes("seekhna") || input.includes("learn")) {
-      engText = "That is a great goal! Practicing daily will make you fluent.";
+    } else if (input.includes("seekhna") || input.includes("learn") || input.includes("english")) {
+      engText = "I will help you speak fluent English every day!";
       lessonBody = `
         <strong>💡 Fluency Tip:</strong>
-        English sikhne ka tareeka:
+        English sikhne ka golden rule:
         <div class="tip-box">
-          Dhyan rakhein, English ko mind me translate mat karein. Chote sentences direct English me bolna start karein.
+          Sochne aur bolne me direct English use karein, Hindi se mind translation avoid karein.
         </div>
       `;
     } else {
-      engText = `I heard: "${hindiInput}". Keep practicing to speak English fluently!`;
+      engText = `I understood: "${inputStr}". Keep practicing to build confidence!`;
       lessonBody = `
-        <strong>💡 General Tip:</strong>
+        <strong>💡 English Coach Tip:</strong>
         <div class="tip-box">
-          Grammar ki tension mat lijiye. Pehle bolne ka confidence layein, baki sab practice se apne aap aane lagega!
+          Pehle chote-chote sentences bolein. Mistakes se mat dariye, fluency practice se hi aayegi.
         </div>
       `;
     }
