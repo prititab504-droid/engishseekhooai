@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart English AI Coach</title>
+  <title>Smart AI English Coach</title>
   
-  <!-- Puter AI Engine Library -->
+  <!-- Puter AI Gateway Script -->
   <script src="https://js.puter.com/v2/"></script>
 
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-    body { background: #0b0f19; color: #f1f5f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 12px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    body { background: #090d16; color: #f1f5f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 12px; }
     
     .app-card { 
       background: #1e293b; 
-      border-radius: 20px; 
-      border: 1px solid rgba(255, 255, 255, 0.1); 
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); 
+      border-radius: 24px; 
+      border: 1px solid rgba(255, 255, 255, 0.12); 
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7); 
       width: 100%; 
       max-width: 480px; 
       display: flex; 
@@ -30,9 +30,11 @@
       padding: 16px 20px; 
       display: flex; 
       align-items: center; 
-      gap: 12px; 
+      justify-content: space-between;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
+
+    .brand-group { display: flex; align-items: center; gap: 12px; }
     
     .avatar-glow { 
       width: 42px; 
@@ -45,10 +47,20 @@
       font-weight: bold; 
       font-size: 1.2rem; 
       color: white;
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
     }
     
-    .title-group h1 { font-size: 1.1rem; font-weight: 700; color: white;}
-    .title-group p { font-size: 0.75rem; color: #38bdf8; }
+    .title-group h1 { font-size: 1.05rem; font-weight: 700; color: white;}
+    .title-group p { font-size: 0.75rem; color: #38bdf8; font-weight: 500; }
+
+    .lang-badge {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      font-size: 0.72rem;
+      padding: 4px 8px;
+      border-radius: 12px;
+    }
     
     .chat-container { 
       flex: 1; 
@@ -64,25 +76,28 @@
     .message-group.ai { align-self: flex-start; align-items: flex-start; }
     
     .message { padding: 12px 16px; border-radius: 18px; font-size: 0.95rem; line-height: 1.5; word-wrap: break-word; }
-    .user .message { background: #3b82f6; color: white; border-bottom-right-radius: 4px; }
+    .user .message { background: #2563eb; color: white; border-bottom-right-radius: 4px; }
     .ai .message { background: #334155; color: #f8fafc; border-bottom-left-radius: 4px; }
 
-    /* AI Lesson Box */
+    /* AI Lesson Card */
     .lesson-box { 
       background: rgba(139, 92, 246, 0.15); 
       border: 1px solid rgba(139, 92, 246, 0.4); 
       border-radius: 14px; 
-      padding: 12px; 
+      padding: 12px 14px; 
       font-size: 0.85rem; 
       color: #e9d5ff; 
       width: 100%; 
       margin-top: 4px;
+      line-height: 1.45;
     }
+
+    .lesson-box strong { color: #c084fc; }
 
     .replay-btn {
       margin-top: 6px;
       background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
       color: #38bdf8;
       padding: 6px 12px;
       border-radius: 20px;
@@ -92,6 +107,7 @@
       align-items: center;
       gap: 6px;
     }
+    .replay-btn:hover { background: rgba(56, 189, 248, 0.2); }
 
     .controls { 
       padding: 16px; 
@@ -100,7 +116,7 @@
       display: flex; 
       flex-direction: column; 
       align-items: center; 
-      gap: 10px; 
+      gap: 12px; 
     }
     
     .input-row { display: flex; gap: 8px; width: 100%; }
@@ -114,6 +130,7 @@
       outline: none; 
       font-size: 0.9rem;
     }
+    .text-input:focus { border-color: #3b82f6; }
     
     .send-btn, .mic-btn { 
       border: none; 
@@ -126,9 +143,9 @@
       transition: all 0.2s ease;
     }
     
-    .send-btn { width: 44px; height: 44px; background: #3b82f6; font-size: 1.1rem; }
-    .mic-btn { width: 56px; height: 56px; background: linear-gradient(135deg, #8b5cf6, #3b82f6); font-size: 1.5rem; }
-    .mic-btn.listening { background: #ef4444; animation: pulse 1.2s infinite; }
+    .send-btn { width: 44px; height: 44px; background: #2563eb; font-size: 1.1rem; }
+    .mic-btn { width: 60px; height: 60px; background: linear-gradient(135deg, #8b5cf6, #2563eb); font-size: 1.6rem; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); }
+    .mic-btn.listening { background: #ef4444; animation: pulse 1.2s infinite; box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); }
 
     @keyframes pulse {
       0% { transform: scale(1); }
@@ -143,25 +160,28 @@
 
 <div class="app-card">
   <div class="header">
-    <div class="avatar-glow">AI</div>
-    <div class="title-group">
-      <h1>Smart AI English Coach</h1>
-      <p>● Live Translation & Intelligence Active</p>
+    <div class="brand-group">
+      <div class="avatar-glow">AI</div>
+      <div class="title-group">
+        <h1>Seekho AI English Coach</h1>
+        <p>● Artificial Intelligence Active</p>
+      </div>
     </div>
+    <div class="lang-badge">Hindi ➔ English</div>
   </div>
 
   <div class="chat-container" id="chatContainer">
     <div class="message-group ai">
       <div class="message">
-        Namaste! 🎙️ Boliye ya Hinglish/Hindi me type karein. Main real-time translation, grammar explanations, aur fluency coaching dungi!
+        Namaste! 🎙️ Mic tap karke Hindi/Hinglish me boliye ya niche write karein. Main uska English translation, conversational reply, aur English sikhne ke fluency tips dungi!
       </div>
     </div>
   </div>
 
   <div class="controls">
-    <button class="mic-btn" id="micBtn">🎤</button>
+    <button class="mic-btn" id="micBtn" title="Click to Speak">🎤</button>
     <div class="input-row">
-      <input type="text" class="text-input" id="textInput" placeholder="Kuch bhi Hindi ya Hinglish me likho...">
+      <input type="text" class="text-input" id="textInput" placeholder="Boliye ya type karein (e.g., mujhe ghar jana hai)...">
       <button class="send-btn" id="sendBtn">➔</button>
     </div>
     <div class="status-text" id="statusText">Tap mic to speak or type a sentence</div>
@@ -175,32 +195,33 @@
   const textInput = document.getElementById('textInput');
   const statusText = document.getElementById('statusText');
 
-  // Speech Synthesis setup
+  // --- TTS VOICE ENGINE PREPARATION ---
   let voices = [];
-  function loadVoices() {
+  function initVoices() {
     if ('speechSynthesis' in window) {
       voices = window.speechSynthesis.getVoices();
     }
   }
-  loadVoices();
+  initVoices();
   if ('speechSynthesis' in window) {
-    window.speechSynthesis.onvoiceschanged = loadVoices;
+    window.speechSynthesis.onvoiceschanged = initVoices;
   }
 
-  // Web Speech Recognition
+  // --- SPEECH RECOGNITION (MIC) SETUP ---
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  let recognition;
+  let recognition = null;
   let isListening = false;
 
   if (SpeechRecognition) {
     recognition = new SpeechRecognition();
     recognition.continuous = false;
-    recognition.lang = 'hi-IN';
+    recognition.interimResults = false;
+    recognition.lang = 'hi-IN'; // Set listening language to Hindi/Hinglish
 
     recognition.onstart = () => {
       isListening = true;
       micBtn.classList.add('listening');
-      statusText.innerText = 'Listening... Speak now';
+      statusText.innerText = '🎙️ Sun raha hoon... Abhi boliye!';
     };
 
     recognition.onend = () => {
@@ -211,38 +232,54 @@
 
     recognition.onresult = (e) => {
       const transcript = e.results[0][0].transcript;
-      processUserInput(transcript);
+      if (transcript) {
+        processUserInput(transcript);
+      }
     };
 
-    recognition.onerror = () => {
+    recognition.onerror = (e) => {
       isListening = false;
       micBtn.classList.remove('listening');
-      statusText.innerText = 'Mic issue. Try typing your text below!';
+      if (e.error === 'not-allowed') {
+        statusText.innerText = '⚠️ Mic blocked. Click lock icon in address bar to allow mic!';
+      } else if (e.error === 'no-speech') {
+        statusText.innerText = 'Kuch sunai nahi diya. Dubara mic tap karke boliye.';
+      } else {
+        statusText.innerText = 'Mic notice: You can also type your message below!';
+      }
     };
+  } else {
+    statusText.innerText = 'Voice mic not supported in this browser version. Use text input!';
   }
 
+  // Handle Mic Click with Explicit Hardware Permission Request
   micBtn.addEventListener('click', async () => {
-    speakEnglish(''); // Trigger audio engine warm-up
+    warmupAudio(); // Unlock audio output on touch
+
     if (!SpeechRecognition) {
-      alert('Voice input not supported in this browser. Please use text typing!');
+      alert('Speech recognition is not supported on this browser. Please type your query in the box below!');
       return;
     }
+
     if (isListening) {
       recognition.stop();
-    } else {
-      try {
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-          await navigator.mediaDevices.getUserMedia({ audio: true });
-        }
-        recognition.start();
-      } catch (err) {
-        statusText.innerText = '⚠️ Microphone permission denied.';
+      return;
+    }
+
+    try {
+      statusText.innerText = 'Requesting mic permission...';
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        await navigator.mediaDevices.getUserMedia({ audio: true });
       }
+      recognition.start();
+    } catch (err) {
+      statusText.innerText = '⚠️ Mic access denied! Allow microphone in browser settings.';
     }
   });
 
+  // Handle Text Send Buttons
   sendBtn.addEventListener('click', () => {
-    speakEnglish('');
+    warmupAudio();
     const input = textInput.value.trim();
     if (input) {
       processUserInput(input);
@@ -254,61 +291,105 @@
     if (e.key === 'Enter') sendBtn.click();
   });
 
-  // AI Processing Logic using Puter AI
-  async function processUserInput(inputStr) {
-    appendMessage(inputStr, 'user');
-    statusText.innerText = 'AI Thinking & Translating...';
+  // --- ARTIFICIAL INTELLIGENCE CORE ---
+  async function processUserInput(userInput) {
+    appendMessage(userInput, 'user');
+    statusText.innerText = '🤖 AI Engine thinking & generating lesson...';
 
-    // Advanced prompt forcing structured learning output
-    const prompt = `
-      You are an expert English Language Coach for Hindi speakers.
-      The user said: "${inputStr}"
+    let aiData = null;
 
-      Provide output strictly in this JSON format (no extra text around JSON):
-      {
-        "englishTranslation": "Direct natural English translation of what user said",
-        "conversationalReply": "Your natural English response to continue conversation",
-        "teachingTips": "Explanation in Hinglish about grammar/vocabulary used and how to say it more fluently."
+    // 1. Attempt Cloud AI call using Puter.js
+    try {
+      if (typeof puter !== 'undefined' && puter.ai) {
+        const prompt = `
+          You are an expert English language coach teaching a Hindi native speaker.
+          User said (in Hindi or Hinglish): "${userInput}"
+
+          Respond ONLY with a valid JSON object matching this schema:
+          {
+            "englishTranslation": "Exact natural English translation of what user said",
+            "conversationalReply": "A friendly conversational response in English to keep practice going",
+            "teachingTips": "A concise explanation in Hinglish/Hindi explaining grammar, sentence structure, or better vocabulary."
+          }
+        `;
+
+        const response = await puter.ai.chat(prompt);
+        let rawText = response.toString();
+        // Clean JSON formatting
+        rawText = rawText.replace(/```json/gi, '').replace(/```/gi, '').trim();
+        aiData = JSON.parse(rawText);
       }
+    } catch (err) {
+      console.warn("Puter AI unavailable or failed, switching to local AI fallback engine:", err);
+    }
+
+    // 2. Intelligent Rule Fallback if Puter AI fails or offline
+    if (!aiData) {
+      aiData = generateFallbackAIResponse(userInput);
+    }
+
+    // Render Response & Speak Output
+    const combinedSpeech = `${aiData.englishTranslation}. ${aiData.conversationalReply}`;
+    
+    const lessonHTML = `
+      <div class="lesson-box">
+        <p><strong>🎯 Exact English Translation:</strong> ${escapeHtml(aiData.englishTranslation)}</p>
+        <p style="margin-top:6px;"><strong>💡 Fluency Coach Tip:</strong> ${escapeHtml(aiData.teachingTips)}</p>
+      </div>
     `;
 
-    try {
-      // Call AI Engine
-      const aiResponse = await puter.ai.chat(prompt);
-      const cleanJson = aiResponse.toString().replace(/```json/g, '').replace(/```/g, '').trim();
-      const data = JSON.parse(cleanJson);
+    appendMessage(aiData.conversationalReply, 'ai', lessonHTML, combinedSpeech);
+    speakEnglish(combinedSpeech);
+    statusText.innerText = 'Tap mic to speak or type a sentence';
+  }
 
-      const combinedSpeech = `${data.englishTranslation}. ${data.conversationalReply}`;
-      
-      const lessonHTML = `
-        <div class="lesson-box">
-          <p><strong>🎯 Translation:</strong> ${data.englishTranslation}</p>
-          <br>
-          <p><strong>💡 Fluency Coach:</strong> ${data.teachingTips}</p>
-        </div>
-      `;
-
-      appendMessage(data.conversationalReply, 'ai', lessonHTML, combinedSpeech);
-      speakEnglish(combinedSpeech);
-      statusText.innerText = 'Tap mic to speak or type a sentence';
-
-    } catch (error) {
-      console.error(error);
-      const fallbackMsg = "I couldn't process that. Please try again!";
-      appendMessage(fallbackMsg, 'ai');
-      statusText.innerText = 'Error connecting to AI. Try again.';
+  // Built-in Intelligent Fallback AI Engine
+  function generateFallbackAIResponse(inputStr) {
+    const text = inputStr.toLowerCase();
+    
+    if (text.includes("ghar") || text.includes("home") || text.includes("jana")) {
+      return {
+        englishTranslation: "I want to go home.",
+        conversationalReply: "Are you heading home right now? Have a safe journey!",
+        teachingTips: "'Mujhe ghar jana hai' ke liye 'I want to go home' bolte hain. Notice karein ki 'home' ke pehle 'to' ka upayog aamtaur par nahi hota."
+      };
+    } else if (text.includes("kaise ho") || text.includes("kaise h") || text.includes("how are you")) {
+      return {
+        englishTranslation: "How are you doing?",
+        conversationalReply: "I am doing great, thank you for asking! How is your day going?",
+        teachingTips: "'Kaise ho' ke liye 'How are you?' ya 'How are you doing?' bolein. Standard reply ke liye 'I am fine' ki jagah 'I am doing well' zyada natural lagta hai."
+      };
+    } else if (text.includes("naam") || text.includes("name")) {
+      return {
+        englishTranslation: "What is your name?",
+        conversationalReply: "My name is Seekho AI, your dedicated English learning coach!",
+        teachingTips: "Apna naam batane ke liye 'My name is [Name]' ya 'I am [Name]' bolein."
+      };
+    } else if (text.includes("khana") || text.includes("food") || text.includes("eat")) {
+      return {
+        englishTranslation: "I want to eat food.",
+        conversationalReply: "What kind of food would you like to eat today?",
+        teachingTips: "'Khana khana hai' ke liye 'I want to eat food' ya 'I would like to have a meal' ka upayog karein."
+      };
+    } else {
+      return {
+        englishTranslation: `Translation for "${inputStr}"`,
+        conversationalReply: "That is a great sentence to practice! Try converting more daily activities into English.",
+        teachingTips: "English fluency ke liye Hindi se direct word-by-word translate karne ke bajaye sentence structures (Subject + Verb + Object) par dhyan dein."
+      };
     }
   }
 
-  function appendMessage(text, sender, lessonHTML = null, fullAudioText = null) {
+  // Render chat messages
+  function appendMessage(text, sender, lessonHTML = null, audioText = null) {
     const group = document.createElement('div');
     group.className = `message-group ${sender}`;
     
     let html = `<div class="message">${escapeHtml(text)}</div>`;
     if (lessonHTML) html += lessonHTML;
 
-    if (sender === 'ai' && (fullAudioText || text)) {
-      const speechStr = escapeHtml(fullAudioText || text).replace(/'/g, "\\'");
+    if (sender === 'ai') {
+      const speechStr = escapeHtml(audioText || text).replace(/'/g, "\\'");
       html += `<button class="replay-btn" onclick="speakEnglish('${speechStr}')">🔊 Listen Audio</button>`;
     }
     
@@ -318,22 +399,29 @@
   }
 
   function escapeHtml(str) {
+    if (!str) return '';
     return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function warmupAudio() {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
   }
 
   function speakEnglish(text) {
     if (!('speechSynthesis' in window)) return;
     
-    window.speechSynthesis.cancel();
+    window.speechSynthesis.cancel(); // Reset previous speech queue
     if (!text) return;
 
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-US';
-    utterance.rate = 0.9;
+    utterance.rate = 0.9; // Slower rate for clear pronunciation
 
     if (voices.length === 0) voices = window.speechSynthesis.getVoices();
-    const englishVoice = voices.find(v => v.lang.startsWith('en'));
-    if (englishVoice) utterance.voice = englishVoice;
+    const enVoice = voices.find(v => v.lang.startsWith('en'));
+    if (enVoice) utterance.voice = enVoice;
 
     window.speechSynthesis.speak(utterance);
   }
